@@ -1,0 +1,72 @@
+.nav {
+    background-color: #012553;
+}
+
+/* cambios
+.nav .navbar-nav .nav-link,
+.nav .navbar-brand,
+.nav .navbar-toggler-icon {
+    font-weight: bold;
+    color: white;
+}
+*/
+
+/* nuevo */
+/* Mantén los estilos existentes */
+.nav .navbar-nav .nav-link,
+.nav .navbar-brand,
+.nav .navbar-toggler-icon {
+    font-weight: bold;
+    color: white;
+}
+
+.nav .navbar-toggler {
+    border-color: white; 
+}
+
+.nav .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+
+.nav .navbar-nav .nav-link:hover,
+.nav .navbar-nav .nav-link:focus,
+.nav .navbar-nav .dropdown-menu {
+    font-weight: bold;
+    color: white;
+}
+
+.nav .dropdown-menu {
+    font-weight: bold;
+    background-color: #012553;
+    /* También puedes cambiar el color del fondo del dropdown si lo deseas */
+}
+
+.nav .dropdown-menu .dropdown-item {
+    font-weight: bold;
+    color: white;
+}
+
+.nav .dropdown-menu .dropdown-item:hover,
+.nav .dropdown-menu .dropdown-item:focus {
+    font-weight: bold;
+    background-color: #011a3d;
+    /* Color de fondo al pasar el ratón por encima */
+    color: white;
+}
+
+/* CSS para Submenús */
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+    background-color: #012553; /* Fondo del submenú */
+}
+
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}

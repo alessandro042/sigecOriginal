@@ -1,0 +1,41 @@
+/* Estilos para Matrícula Igualdad */
+
+/* Estilos para el título principal */
+.display-4 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+/* Estilos para la descripción */
+.lead {
+    font-family: 'Arial', sans-serif;
+    color: #666;
+}
+
+/* Estilos para la cita */
+.blockquote {
+    font-family: 'Arial', sans-serif;
+    color: #888;
+}
+
+/* Estilos para la tabla */
+.table {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #fff;
+<<<<<<< HEAD
+}
+=======
+}
+>>>>>>> 1e82c6e6b43700e248a3899b98e94e82aa6d17c2
