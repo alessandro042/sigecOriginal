@@ -9,10 +9,6 @@
         <div class="card-body">
             <h5 class="card-title">Total de Ventas Acumuladas</h5>
             <p class="card-text"><strong>${{ number_format($totalVentas, 2) }}</strong></p>
-            <form action="{{ route('corte_caja.store') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-primary">Realizar Corte de Caja</button>
-            </form>
         </div>
     </div>
 

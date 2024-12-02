@@ -13,8 +13,8 @@
         <div class="card-header text-white rounded-top-4" style="background-color: #012553;">
             <h5 class="mb-0">Listado de Proveedores</h5>
         </div>
-        <div class="card-body">
-            <table class="table table-hover align-middle text-center" style="border: 1px solid #ddd;">
+        <div class="table-responsive">
+            <table id="usuariosTable" class="table table-hover align-middle text-center" style="border: 1px solid #ddd;">
                 <thead style="background-color: #012553; color: #fff;">
                     <tr>
                         <th>#</th>
@@ -34,14 +34,14 @@
                             <td>{{ $proveedor->email }}</td>
                             <td>{{ $proveedor->direccion ?? 'N/A' }}</td>
                             <td>
-                                <div class="d-flex justify-content-center gap-2">
-                                    <button class="btn btn-sm text-white shadow-sm" style="background-color: #01427E;" data-bs-toggle="modal" data-bs-target="#editProviderModal-{{ $proveedor->id }}">
+                                <div class="d-flex align-items-baseline" role="group" aria-label="Acciones">
+                                    <button class="btn btn-sm text-white shadow-sm" style="background-color: #01427E; flex: 0.5; margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#editProviderModal-{{ $proveedor->id }}">
                                         <i class="bi bi-pencil-square"></i> Editar
                                     </button>
                                     <form action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este proveedor?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-sm text-white shadow-sm" style="background-color: #8B0000;">
+                                        <button class="btn btn-sm text-white shadow-sm" style="background-color: #8B0000; flex: 1;">
                                             <i class="bi bi-trash"></i> Eliminar
                                         </button>
                                     </form>
@@ -129,3 +129,76 @@
     </div>
 </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#usuariosTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            responsive: true,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+
+        const buttons = document.querySelectorAll('.toggle-status');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-id');
+                const row = document.getElementById('usuario-' + userId);
+                const statusCell = row.querySelector('.estado');
+                const button = this;
+
+                Swal.fire({
+                    title: 'Confirmar acción',
+                    text: '¿Estás seguro de que deseas cambiar el estado del usuario?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/usuarios/${userId}/toggle-status`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status == 1) {
+                                    statusCell.textContent = 'Activo';
+                                    button.textContent = 'Deshabilitar';
+                                    button.style.backgroundColor = '#8B0000';
+                                    button.classList.add('btn-danger');
+                                    Swal.fire({
+                                        title: 'Estado cambiado',
+                                        text: 'El usuario ahora está activo',
+                                        icon: 'success'
+                                    });
+                                } else {
+                                    statusCell.textContent = 'Inactivo';
+                                    button.textContent = 'Habilitar';
+                                    button.style.backgroundColor = '#4CAF50';
+                                    button.classList.remove('btn-danger');
+                                    button.classList.add('btn-success');
+                                    // Mostrar alerta de éxito
+                                    Swal.fire({
+                                        title: 'Estado cambiado',
+                                        text: 'El usuario ahora está inactivo',
+                                        icon: 'success'
+                                    });
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    }
+                });
+            });
+        });
+    });
+</script>
+
