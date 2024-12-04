@@ -93,4 +93,14 @@ class UsuarioController extends Controller
 
         return redirect()->route('usuarios.index');
     }
+
+    public function toggleStatus($id)
+    {
+        $usuario = Usuario::findOrFail($id);
+
+        $usuario->status = $usuario->status == 1 ? 0 : 1; 
+        $usuario->save(); 
+
+        return response()->json(['status' => $usuario->status]);
+    }
 }
