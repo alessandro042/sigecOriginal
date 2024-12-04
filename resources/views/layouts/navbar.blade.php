@@ -9,9 +9,7 @@
         </button>
 
         <div class="navbar-collapse collapse" id="navbarSupportedContent">
-            <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto">
-                <!-- Simple Links -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/') }}">Inicio</a>
                 </li>
@@ -132,10 +130,11 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink6">
                                 <li><a class="dropdown-item" href="{{ route('usuarios.index') }}">Usuarios</a></li>
-                                <li><a class="dropdown-item" href="{{ route('bitacora.index') }}">Bitacora</a></li>
-                                <li><a class="dropdown-item" href="{{ route('unidad-academica.index') }}">Unidad Académica</a></li>
-                                <li><a class="dropdown-item" href="{{ route('programas-educativos.index') }}">Programa Educativo</a></li>
-                                <li><a class="dropdown-item" href="{{ route('fechas-corte.index') }}">Fechas de Corte</a></li>
+                                <li><a class="dropdown-item" href="{{ route('proveedores.index') }}">Proveedores</a></li>
+                                <li><a class="dropdown-item" href="{{ route('productos.index') }}">Productos</a></li>
+                                <li><a class="dropdown-item" href="{{ route('ventas.index') }}">Ventas</a></li>
+                                <li><a class="dropdown-item" href="{{ route('ventas.create') }}">Ventas create</a></li>
+                                <li><a class="dropdown-item" href="{{ route('corte_caja.index') }}">Corte de caja</a></li>
                             </ul>
                         </li>
                     @elseif (Auth::user()->hasRol('Editor'))

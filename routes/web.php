@@ -13,6 +13,10 @@ use App\Http\Controllers\ProgramaEducativoController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\FechaCorteController;
+use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\VentaController;
+use App\Http\Controllers\CorteCajaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -154,8 +158,30 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/index', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
-        Route::get('/{id}/edit', 'edit')->name('edit'); // GET request for editing
-        Route::put('/{id}', 'update')->name('update'); // PUT request for updating
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update'); 
         Route::post('/{id}/toggle-status', 'toggleStatus')->name('toggleStatus');
     });
+
+    Route::controller(ProveedorController::class)->group(function () {
+        Route::get('proveedores', 'index')->name('proveedores.index');
+        Route::post('proveedores', 'store')->name('proveedores.store');
+        Route::put('proveedores/{proveedor}', 'update')->name('proveedores.update');
+        Route::delete('proveedores/{proveedor}', 'destroy')->name('proveedores.destroy');
+    });
+
+
+
+    Route::get('productos', [ProductoController::class, 'index'])->name('productos.index');
+        Route::post('productos', [ProductoController::class, 'store'])->name('productos.store');
+        Route::put('productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
+        Route::delete('productos/{producto}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+
+        Route::resource('ventas', VentaController::class);
+
+        Route::get('corte-caja', [CorteCajaController::class, 'index'])->name('corte_caja.index');
+Route::post('corte-caja', [CorteCajaController::class, 'store'])->name('corte_caja.store');
+Route::resource('ventas', VentaController::class);
+Route::get('corte-caja', [CorteCajaController::class, 'index'])->name('corte_caja.index');
+Route::post('corte-caja/cerrar', [CorteCajaController::class, 'cerrarCorte'])->name('corte_caja.cerrar');
 });
