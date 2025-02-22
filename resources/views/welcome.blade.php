@@ -20,7 +20,16 @@
                 <i class="fas fa-plus-circle"></i> {{ __('Hacer Nueva Venta') }}
             </a>
         </div>
+        <div >
     </div>
+
+    </div>
+    <div class="col text-center">
+            <a href="{{ route('ventas.create') }}" class="btn btn-lg text-white shadow" 
+               style="background-color: #e63946; padding: 15px 30px; font-size: 1.25rem; font-weight: bold; border-radius: 8px;">
+                <i class="fas fa-plus-circle"></i> {{ __('Hacer Nueva Venta') }}
+            </a>
+        </div>
 
     <!-- Tarjetas principales -->
     <div class="row">
@@ -31,7 +40,7 @@
                     <i class="fas fa-truck fa-3x text-primary mb-3"></i>
                     <h5 class="card-title fw-bold">{{ __('Proveedores') }}</h5>
                     <p class="card-text text-muted">{{ __('Gestión de proveedores para mantener relaciones eficientes con tus socios comerciales.') }}</p>
-                    <a href="{{ route('proveedores.index') }}" class="btn btn-primary mt-3" style="background-color: #012553;">
+                    <a id="btn-proveedores" href="{{ route('proveedores.index') }}" class="btn btn-primary mt-3" style="background-color: #012553;">
                         <i class="fas fa-truck"></i> {{ __('Ir a Proveedores') }}
                     </a>
                 </div>
@@ -106,3 +115,25 @@
     </div>
 </div>
 @endsection
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnProveedores = document.getElementById('');
+
+        btnProveedores.addEventListener('click', function (e) {
+            e.preventDefault(); 
+            const userRole = "{{ Auth::check() ? Auth::user()->role : 'guest' }}";
+
+            if (userRole !== 'Administrador') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Acceso Denegado',
+                    text: 'No cuentas con los permisos suficientes para acceder a esta sección.',
+                });
+            } else {
+                window.location.href = this.href;
+            }
+        });
+    });
+</script>

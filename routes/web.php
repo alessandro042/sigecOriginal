@@ -17,6 +17,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\CorteCajaController;
+use App\Http\Controllers\GastosController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -184,4 +185,6 @@ Route::post('corte-caja', [CorteCajaController::class, 'store'])->name('corte_ca
 Route::resource('ventas', VentaController::class);
 Route::get('corte-caja', [CorteCajaController::class, 'index'])->name('corte_caja.index');
 Route::post('corte-caja/cerrar', [CorteCajaController::class, 'cerrarCorte'])->name('corte_caja.cerrar');
+
+Route::get('/gastos', [GastosController::class, 'index'])->name('gastos.index');
 });

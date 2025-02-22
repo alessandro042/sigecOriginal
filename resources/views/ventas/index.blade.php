@@ -54,14 +54,15 @@
                                     onclick="loadVentaEdit({{ $venta }}, {{ $productos }})">
                                 <i class="bi bi-pencil-square"></i> Editar
                             </button>
-                            <form action="{{ route('ventas.destroy', $venta->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta venta?');" style="display:inline;">
+                            <form id="deleteForm-{{ $venta->id }}" action="{{ route('ventas.destroy', $venta->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm text-white shadow-sm" style="background-color: #8B0000; flex: 1;">
-                                    <i class="bi bi-trash"></i> Eliminar
+                                <button type="button" class="btn btn-sm text-white shadow-sm" style="background-color: #8B0000; flex: 1;" 
+                                onclick="confirmDelete({{ $venta->id }})">
+                                <i class="bi bi-trash"></i> Eliminar
                                 </button>
                             </form>
-                        </div>
+</div>
                     </td>
                 </tr>
                 @endforeach
@@ -93,30 +94,42 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        // Inicializa DataTables
-        var table = $('#ventasTable').DataTable();
+   $(document).ready(function() {
+    var table = $('#ventasTable').DataTable();
+    $('#startDate, #endDate').on('change', function() {
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();    
+        $.fn.dataTable.ext.search = [];
 
-        // Filtro por rango de fechas
-        $('#startDate, #endDate').on('change', function() {
-            var startDate = $('#startDate').val();
-            var endDate = $('#endDate').val();
-
-            // Filtra la columna de fecha entre las dos fechas
+        if (startDate || endDate) {
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    var date = new Date(data[3]); // La fecha está en la cuarta columna
-                    return (startDate === '' || date >= new Date(startDate)) &&
-                           (endDate === '' || date <= new Date(endDate));
+                    var columnDate = data[3].split(' ')[0]; 
+                    var rowDate = new Date(columnDate); 
+                    var start = startDate ? new Date(startDate) : null;
+                    var end = endDate ? new Date(endDate) : null;
+
+                    rowDate.setHours(0, 0, 0, 0);
+                    if (start) start.setHours(0, 0, 0, 0);
+                    if (end) end.setHours(0, 0, 0, 0);
+
+                    if (
+                        (!start || rowDate >= start) && 
+                        (!end || rowDate <= end)
+                    ) {
+                        return true;
+                    }
+                    return false;
                 }
             );
-
-            // Redibuja la tabla
-            table.draw();
-        });
+        }
+        table.draw();
     });
+});
 
-    // Función para cargar los datos en el modal de edición
+
+
+
     function loadVentaEdit(venta, productos) {
         let modalBody = document.getElementById('editModalBody');
         let form = document.getElementById('editForm');
@@ -150,6 +163,25 @@
             }
         });
     });
+
+
+    function confirmDelete(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#8B0000',
+        cancelButtonColor: '#01427E',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            document.getElementById(`deleteForm-${id}`).submit();
+        }
+    });
+}
 
 </script>
 @endsection

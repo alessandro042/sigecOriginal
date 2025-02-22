@@ -13,6 +13,8 @@ class CreateProductosTable extends Migration
             $table->string('nombre');
             $table->text('descripcion')->nullable();
             $table->decimal('precio', 15, 2);
+            $table->decimal('costo', 15, 2);
+            $table->string('codigo')->unique();
             $table->integer('stock');
             $table->foreignId('id_proveedor')->constrained('proveedores')->onDelete('cascade');
             $table->timestamps();

@@ -38,13 +38,17 @@
                                     <button class="btn btn-sm text-white shadow-sm" style="background-color: #01427E; flex: 0.5; margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#editProviderModal-{{ $proveedor->id }}">
                                         <i class="bi bi-pencil-square"></i> Editar
                                     </button>
-                                    <form action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este proveedor?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm text-white shadow-sm" style="background-color: #8B0000; flex: 1;">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </button>
-                                    </form>
+
+                            <button class="btn btn-sm text-white shadow-sm delete-btn" 
+                                    style="background-color: #8B0000;" 
+                                    data-id="{{ $proveedor->id }}" 
+                                    data-name="{{ $proveedor->nombre }}">
+                                    <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        <form id="delete-form-{{ $proveedor->id }}" action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" style="display: none;">
+                          @csrf
+                          @method('DELETE')
+                        </form>
                                 </div>
                             </td>
                         </tr>
@@ -131,70 +135,27 @@
 @endsection
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $('#usuariosTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            responsive: true,
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-            }
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
 
-        const buttons = document.querySelectorAll('.toggle-status');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                const userId = this.getAttribute('data-id');
-                const row = document.getElementById('usuario-' + userId);
-                const statusCell = row.querySelector('.estado');
-                const button = this;
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.getAttribute('data-id');
+                const productName = this.getAttribute('data-name');
+                const form = document.getElementById(`delete-form-${productId}`);
 
                 Swal.fire({
-                    title: 'Confirmar acción',
-                    text: '¿Estás seguro de que deseas cambiar el estado del usuario?',
-                    icon: 'warning',
+                    title: `¿Eliminar ${productName}?`,
+                    text: "Esta acción no se puede deshacer",
+                    icon: "warning",
                     showCancelButton: true,
-                    confirmButtonText: 'Sí',
-                    cancelButtonText: 'Cancelar'
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`/usuarios/${userId}/toggle-status`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.status == 1) {
-                                    statusCell.textContent = 'Activo';
-                                    button.textContent = 'Deshabilitar';
-                                    button.style.backgroundColor = '#8B0000';
-                                    button.classList.add('btn-danger');
-                                    Swal.fire({
-                                        title: 'Estado cambiado',
-                                        text: 'El usuario ahora está activo',
-                                        icon: 'success'
-                                    });
-                                } else {
-                                    statusCell.textContent = 'Inactivo';
-                                    button.textContent = 'Habilitar';
-                                    button.style.backgroundColor = '#4CAF50';
-                                    button.classList.remove('btn-danger');
-                                    button.classList.add('btn-success');
-                                    // Mostrar alerta de éxito
-                                    Swal.fire({
-                                        title: 'Estado cambiado',
-                                        text: 'El usuario ahora está inactivo',
-                                        icon: 'success'
-                                    });
-                                }
-                            })
-                            .catch(error => console.error('Error:', error));
+                        form.submit();
                     }
                 });
             });

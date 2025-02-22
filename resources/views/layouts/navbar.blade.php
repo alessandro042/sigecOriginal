@@ -11,7 +11,6 @@
         <div class="navbar-collapse collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto">
                 @if (Auth::check())
-                    <!-- Administración para Administradores -->
                     @if (Auth::user()->hasRol('Administrador'))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink6" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,10 +27,12 @@
                         <a class="nav-link" href="{{ route('ventas.index') }}">Ventas</a>
                     </li>
 
-                    <!-- Proveedores -->
+                   <!-- Proveedores -->
+                    @if (Auth::check() && Auth::user()->hasRol('Administrador'))
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('proveedores.index') }}">Proveedores</a>
+                    <a class="nav-link" href="{{ route('proveedores.index') }}">Proveedores</a>
                     </li>
+                    @endif
 
                     <!-- Productos -->
                     <li class="nav-item">
@@ -47,6 +48,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('corte_caja.index') }}">Corte de Caja</a>
                     </li>
+
+                    <!-- Gastos -->
+                    @if (Auth::check() && Auth::user()->hasRol('Administrador'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('gastos.index') }}">Gastos</a>
+                    </li>
+                    @endif
                 @endif
             </ul>
 

@@ -13,6 +13,8 @@ class Producto extends Model
         'nombre',
         'descripcion',
         'precio',
+        'costo',
+        'codigo',
         'stock',
         'id_proveedor',
     ];
